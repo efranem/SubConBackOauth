@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include
+		resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+	<property name="HOME_LOG" value="logs/auth.log" />
+
+	<springProfile name="test">
+		<include
+			resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+		<root level="DEBUG">
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+
+	<springProfile name="prod">
+
+		<appender name="FILE-ROLLING"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${HOME_LOG}</file>
+
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+				<fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log
+				</fileNamePattern>
+				<!-- each archived file, size max 10MB -->
+				<maxFileSize>10MB</maxFileSize>
+				<!-- total size of all archive files, if total size > 20GB, it will delete 
+					old archived file -->
+				<totalSizeCap>100MB</totalSizeCap>
+				<!-- 60 days to keep -->
+				<maxHistory>10</maxHistory>
+			</rollingPolicy>
+
+			<encoder>
+				<pattern>%d %p %m%n</pattern>
+			</encoder>
+		</appender>
+
+		<logger name="org.springframework.boot.SpringApplication"
+			level="INFO" additivity="false">
+			<appender-ref ref="FILE-ROLLING" />
+		</logger>
+		<logger name="com.telcel" level="INFO" />
+		<root level="ERROR">
+			<appender-ref ref="FILE-ROLLING" />
+		</root>
+	</springProfile>
+
+</configuration>
