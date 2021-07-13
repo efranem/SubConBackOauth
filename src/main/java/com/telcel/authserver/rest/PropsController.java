@@ -38,7 +38,7 @@ public class PropsController {
 		StringBuilder str = new StringBuilder();
 		str.append("{");
 		str.append(getJsonProperty("version")).append(",");
-		str.append(getJsonProperty("ldap.api"));
+		str.append(getJsonProperty("user.api"));
 		str.append("}");
 		
 		return str.toString();
